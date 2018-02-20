@@ -1,0 +1,15 @@
+﻿{
+    "fields": [
+        {"name": "id", "type": "int"},
+        {"name": "upexp", "type": "int"},
+        {"name": "reqlevel", "type": "int"},
+        {"name": "btn", "type": "int"},
+        {"name": "beginlevel", "type": "int"},
+        {"name": "endlevel", "type": "int"},
+        {"name": "max_rate", "type": "int"},
+        {"name": "parts", "type": "int"}
+    ],
+    "files": [
+        "item/ability_level"
+    ]
+}

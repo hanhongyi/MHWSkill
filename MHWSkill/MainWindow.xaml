@@ -1,0 +1,284 @@
+﻿<Window x:Class="MHWSkill.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mhwui="clr-namespace:MHWSkill.ui"
+        Title="MainWindow" Height="500" Width="1100">
+    <Grid>
+        <Menu Background="White">
+            <MenuItem Header="File">
+                <MenuItem Name="MenuItemReload" Header="Reload" Click="MenuItemReload_Click" Margin="0,0,-42,0"/>
+            </MenuItem>
+
+            <MenuItem Header="Help">
+                <MenuItem Name="MenuItemDump" Header="Dump" Width="120" Click="MenuItemDump_Click"/>
+                <MenuItem Name="MenuItemSaveExcel" Header="Save" Width="120" Click="MenuItemSaveExcel_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,21,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="0" VerticalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="122"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <mhwui:FilterComboBox HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+								      TextSearch.TextPath="FilterText" Margin="0,0,0,0"
+                                      ToolTipService.IsEnabled="True"
+                                      Grid.Row="1"
+                                      
+                                ItemsSource="{Binding SkillList.Filter.History}"
+						        SelectedItem="{Binding SkillList.Filter.SelectedItem,UpdateSourceTrigger=PropertyChanged}"
+								Text="{Binding SkillList.Filter.Current, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding SkillList.Filter.IsFiltered}">
+                </mhwui:FilterComboBox>
+
+                <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" Grid.Row="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="15"/>
+                        </Grid.RowDefinitions>
+
+                        <CheckBox Content="All" Grid.Row="0" IsChecked="{Binding SkillList.IsShowAllCategory, Mode=TwoWay}"
+                                  Command="{Binding SkillList.ToggleIsShowAllCategory}"/>
+                        <CheckBox Content="攻擊/防禦/回避 " Grid.Row="1" 
+                                  IsChecked="{Binding SkillList.IsShowCategory[0]}"
+                                  Command="{Binding SkillList.ToggleIsShowCategory[0]}"/>
+                        <CheckBox Content="體力/耐力/回復" Grid.Row="2" IsChecked="{Binding SkillList.IsShowCategory[1]}" Command="{Binding SkillList.ToggleIsShowCategory[1]}" />
+                        <CheckBox Content="耐性/無效化" Grid.Row="3" IsChecked="{Binding SkillList.IsShowCategory[2]}" Command="{Binding SkillList.ToggleIsShowCategory[2]}" />
+                        <CheckBox Content="槍手用" Grid.Row="4" IsChecked="{Binding SkillList.IsShowCategory[3]}" Command="{Binding SkillList.ToggleIsShowCategory[3]}" />
+                        <CheckBox Content="報酬/採取/調合" Grid.Row="5" IsChecked="{Binding SkillList.IsShowCategory[4]}" Command="{Binding SkillList.ToggleIsShowCategory[4]}" />
+                        <CheckBox Content="艾露猫/其他" Grid.Row="6" IsChecked="{Binding SkillList.IsShowCategory[5]}" Command="{Binding SkillList.ToggleIsShowCategory[5]}" />
+                        <CheckBox Content="系列技能" Grid.Row="7" IsChecked="{Binding SkillList.IsShowCategory[6]}" Command="{Binding SkillList.ToggleIsShowCategory[6]}" />
+                    </Grid>
+                </Border>
+                <ListView VerticalAlignment="Stretch"  Grid.Row="2" HorizontalAlignment="Stretch" ItemsSource="{Binding SkillList.Skills}"  Margin="0,0,0,0" MinWidth="170" Grid.ColumnSpan="2" MouseDoubleClick="HandleDoubleClick">
+                    
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Style.Triggers>
+                                <!--<DataTrigger Binding="{Binding red}" Value="1">
+                                    <Setter Property="Background" Value="Red"/>
+                                </DataTrigger>-->
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn x:Name="skills" Header="skills" Width="165" DisplayMemberBinding="{Binding skillName}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+
+            <Grid Grid.Column="1" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="283"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" Grid.Row="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Label Content="头" VerticalAlignment="Top"/>
+                            <Button Content="选择" Command="{Binding EquipList.DoClickSlots[0]}" Width="40" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <mhwui:FilterComboBox Height="20" HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Bottom"
+								      TextSearch.TextPath="FilterText" Margin="0,0,0,0"
+                                      ToolTipService.IsEnabled="True"
+                                              
+                                ItemsSource="{Binding EquipList.Slots[0]}"
+						        SelectedItem="{Binding EquipList.SelectedItem[0],UpdateSourceTrigger=PropertyChanged}"
+								Text="{Binding EquipList.SlotText[0], UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding EquipList.IsEnable[0]}">
+                            </mhwui:FilterComboBox>
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <Label Content="身体" VerticalAlignment="Top"/>
+                            <Button Content="选择" Command="{Binding EquipList.DoClickSlots[1]}" Width="40" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <mhwui:FilterComboBox Height="20" HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Bottom"
+								      TextSearch.TextPath="FilterText" Margin="0,0,0,0"
+                                      ToolTipService.IsEnabled="True"
+                                              
+                                ItemsSource="{Binding EquipList.Slots[1]}"
+						        SelectedItem="{Binding EquipList.SelectedItem[1],UpdateSourceTrigger=PropertyChanged}"
+								Text="{Binding EquipList.SlotText[1], UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding EquipList.IsEnable[1]}">
+                            </mhwui:FilterComboBox>
+                        </Grid>
+
+                        <Grid Grid.Row="2">
+                            <Label Content="手" VerticalAlignment="Top"/>
+                            <Button Content="选择" Command="{Binding EquipList.DoClickSlots[2]}" Width="40" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <mhwui:FilterComboBox Height="20" HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Bottom"
+								      TextSearch.TextPath="FilterText" Margin="0,0,0,0"
+                                      ToolTipService.IsEnabled="True"
+                                              
+                                ItemsSource="{Binding EquipList.Slots[2]}"
+						        SelectedItem="{Binding EquipList.SelectedItem[2],UpdateSourceTrigger=PropertyChanged}"
+								Text="{Binding EquipList.SlotText[2], UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding EquipList.IsEnable[2]}">
+                            </mhwui:FilterComboBox>
+                        </Grid>
+
+                        <Grid Grid.Row="3">
+                            <Label Content="腰带" VerticalAlignment="Top"/>
+                            <Button Content="选择" Command="{Binding EquipList.DoClickSlots[3]}" Width="40" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <mhwui:FilterComboBox Height="20" HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Bottom"
+								      TextSearch.TextPath="FilterText" Margin="0,0,0,0"
+                                      ToolTipService.IsEnabled="True"
+                                              
+                                ItemsSource="{Binding EquipList.Slots[3]}"
+						        SelectedItem="{Binding EquipList.SelectedItem[3],UpdateSourceTrigger=PropertyChanged}"
+								Text="{Binding EquipList.SlotText[3], UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding EquipList.IsEnable[3]}">
+                            </mhwui:FilterComboBox>
+                        </Grid>
+
+                        <Grid Grid.Row="4">
+                            <Label Content="鞋子" VerticalAlignment="Top"/>
+                            <Button Content="选择" Command="{Binding EquipList.DoClickSlots[4]}" Width="40" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <mhwui:FilterComboBox Height="20" HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Bottom"
+								      TextSearch.TextPath="FilterText" Margin="0,0,0,0"
+                                      ToolTipService.IsEnabled="True"
+                                              
+                                ItemsSource="{Binding EquipList.Slots[4]}"
+						        SelectedItem="{Binding EquipList.SelectedItem[4],UpdateSourceTrigger=PropertyChanged}"
+								Text="{Binding EquipList.SlotText[4], UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding EquipList.IsEnable[4]}">
+                            </mhwui:FilterComboBox>
+                        </Grid>
+
+                        <Grid Grid.Row="5">
+                            <Label Content="护石" VerticalAlignment="Top"/>
+                            <Button Content="选择" Command="{Binding EquipList.DoClickSlots[5]}" Width="40" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <mhwui:FilterComboBox Height="20" HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Bottom"
+								      TextSearch.TextPath="FilterText" Margin="0,0,0,0"
+                                      ToolTipService.IsEnabled="True"
+                                              
+                                ItemsSource="{Binding EquipList.Slots[5]}"
+						        SelectedItem="{Binding EquipList.SelectedItem[5],UpdateSourceTrigger=PropertyChanged}"
+								Text="{Binding EquipList.SlotText[5], UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding EquipList.IsEnable[5]}">
+                            </mhwui:FilterComboBox>
+                        </Grid>
+
+                        <Grid Grid.Row="6">
+                            <Label Content="镶嵌" VerticalAlignment="Top"/>
+                            <Button Content="选择" Command="{Binding EquipList.DoClickSlots[6]}" Width="40" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                            <CheckBox Content="使用镶嵌" Margin="3,25,0,0" IsChecked="{Binding EquipList.IsUseDecoration}" 
+                                      Command="{Binding EquipList.ToggleUseDecoration}" />
+                            
+                        </Grid>
+                    </Grid>
+                </Border>
+
+
+                <ListView VerticalAlignment="Stretch"  Grid.Row="2" HorizontalAlignment="Stretch" ItemsSource="{Binding SelectedSkillList.Skills}" Margin="0,0,0,0" MinWidth="170" Grid.ColumnSpan="2" MouseDoubleClick="HandleSelectedSkillListDoubleClick">
+
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Style.Triggers>
+                                <!--<DataTrigger Binding="{Binding red}" Value="1">
+                                    <Setter Property="Background" Value="Red"/>
+                                </DataTrigger>-->
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding SelectedSkillList.DeleteCommand}"
+						  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"
+						  Header="删除"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="选中技能" Width="165" DisplayMemberBinding="{Binding skillName}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+
+            <Grid Grid.Column="2" VerticalAlignment="Stretch" Margin="0,0,0,0">
+                <ListView VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding ResultEquipList.Data}" Margin="1,0,0,0" MinWidth="170" Grid.ColumnSpan="2">
+
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding background}" Value="1">
+                                    <Setter Property="Background" Value="Gray"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <!--<MenuItem Command="{Binding SelectedSkillList.DeleteCommand}"
+						  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"
+						  Header="删除"/>-->
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="hr" Width="35" DisplayMemberBinding="{Binding hr}"/>
+                            <GridViewColumn Header="部位" Width="40" DisplayMemberBinding="{Binding slot}"/>
+                            <GridViewColumn Header="装备名称" Width="150" DisplayMemberBinding="{Binding name}"/>
+                            <GridViewColumn Header="防御" Width="40" DisplayMemberBinding="{Binding defense}"/>
+                            <GridViewColumn Header="技能" Width="265" DisplayMemberBinding="{Binding skills}"/>
+                            <GridViewColumn Header="火" Width="30" DisplayMemberBinding="{Binding fire}"/>
+                            <GridViewColumn Header="水" Width="30" DisplayMemberBinding="{Binding water}"/>
+                            <GridViewColumn Header="雷" Width="30" DisplayMemberBinding="{Binding thunder}"/>
+                            <GridViewColumn Header="氷" Width="30" DisplayMemberBinding="{Binding ice}"/>
+                            <GridViewColumn Header="龍	" Width="30" DisplayMemberBinding="{Binding dragon}"/>
+                            <GridViewColumn Header="孔位" Width="65" DisplayMemberBinding="{Binding decoration}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+            
+        </Grid>
+
+    </Grid>
+</Window>
